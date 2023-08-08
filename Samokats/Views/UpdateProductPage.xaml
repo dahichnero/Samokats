@@ -1,0 +1,73 @@
+﻿<Page x:Class="Samokats.Views.UpdateProductPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Samokats.Views"
+      xmlns:conv="clr-namespace:Samokats.Converters"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="UpdateProductPage">
+    <Page.Resources>
+        <conv:HasErrorsToEnableMultiConverter x:Key="errorsToVisibilityConverter"/>
+        <conv:ImagePathConverter x:Key="imageConverter"/>
+    </Page.Resources>
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="1" Margin="10 0">
+            <Image x:Name="photoImage"  Source="{Binding Samokat.Photo, Converter={StaticResource imageConverter}}"/>
+            <TextBlock Foreground="Red" Text="{Binding ElementName=photoImage, Path=(Validation.Errors)[0].ErrorContent}"/>
+            <Button Content="Изменить" Command="{Binding ImageCommand}"/>
+        </StackPanel>
+        <StackPanel Margin="10 0">
+            <Label Content="Название"/>
+            <TextBox x:Name="nameTextBox" Text="{Binding Samokat.Name, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Foreground="Red" Text="{Binding ElementName=nameTextBox, Path=(Validation.Errors)[0].ErrorContent}"/>
+            
+            <Label Content="Тип"/>
+            <ComboBox x:Name="typeComboBox" ItemsSource="{Binding Types}" DisplayMemberPath="TypeName" SelectedItem="{Binding Samokat.ProductType, ValidatesOnDataErrors=True}"/>
+            <TextBlock Foreground="Red" Text="{Binding ElementName=typeComboBox, Path=(Validation.Errors)[0].ErrorContent}"/>
+            
+            <Label Content="Производитель"/>
+            <ComboBox x:Name="manuComboBox" ItemsSource="{Binding ManufacturerList}" DisplayMemberPath="NameManu" SelectedItem="{Binding Samokat.Manufactur, ValidatesOnDataErrors=True}"/>
+            <TextBlock Foreground="Red" Text="{Binding ElementName=manuComboBox, Path=(Validation.Errors)[0].ErrorContent}"/>
+            
+            <Label Content="Цена"/>
+            <TextBox x:Name="priceTextBox" Text="{Binding Samokat.Price, ValidatesOnDataErrors=True}"/>
+            <TextBlock Foreground="Red" Text="{Binding ElementName=priceTextBox, Path=(Validation.Errors)[0].ErrorContent}"/>
+            <Label Content="Максимальная грузоподъемность (кг)"/>
+            <TextBox x:Name="loadTextBox" Text="{Binding Samokat.MaxLoad, ValidatesOnDataErrors=True}"/>
+            <TextBlock Foreground="Red" Text="{Binding ElementName=loadTextBox, Path=(Validation.Errors)[0].ErrorContent}"/>
+            
+            <Label Content="Запас хода (км)"/>
+            <TextBox x:Name="powerTextBox" Text="{Binding Samokat.PowerReserve, ValidatesOnDataErrors=True}"/>
+            <TextBlock Foreground="Red" Text="{Binding ElementName=powerTextBox, Path=(Validation.Errors)[0].ErrorContent}"/>
+            
+            <Label Content="Максимальная скорость (км/ч)"/>
+            <TextBox x:Name="speedTextBox" Text="{Binding Samokat.MaxSpeed, ValidatesOnDataErrors=True}"/>
+            <TextBlock Foreground="Red" Text="{Binding ElementName=speedTextBox, Path=(Validation.Errors)[0].ErrorContent}"/>
+            <Label Content="Мощность (Вт)"/>
+            <TextBox x:Name="wattTextBox" Text="{Binding Samokat.MaxWatt, ValidatesOnDataErrors=True}"/>
+            <TextBlock Foreground="Red" Text="{Binding ElementName=wattTextBox, Path=(Validation.Errors)[0].ErrorContent}"/>
+            <Button Content="Сохранить" Margin="0 10" Command="{Binding SaveCommand}">
+                <Button.IsEnabled>
+                    <MultiBinding Converter="{StaticResource errorsToVisibilityConverter}">
+                        <Binding ElementName="nameTextBox" Path="(Validation.HasError)"/>
+                        <Binding ElementName="priceTextBox" Path="(Validation.HasError)"/>
+                        <Binding ElementName="powerTextBox" Path="(Validation.HasError)"/>
+                        <Binding ElementName="speedTextBox" Path="(Validation.HasError)"/>
+                        <Binding ElementName="wattTextBox" Path="(Validation.HasError)"/>
+                        <Binding ElementName="loadTextBox" Path="(Validation.HasError)"/>
+                        <Binding ElementName="typeComboBox" Path="(Validation.HasError)"/>
+                        <Binding ElementName="manuComboBox" Path="(Validation.HasError)"/>
+                    </MultiBinding>
+                </Button.IsEnabled>
+            </Button>
+            <Button Content="Назад" Command="{Binding BackCommand}"/>
+        </StackPanel>
+    </Grid>
+</Page>

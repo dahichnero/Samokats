@@ -1,0 +1,74 @@
+﻿<Page x:Class="Samokats.Views.ProductsListPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:conv="clr-namespace:Samokats.Converters"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ProductsListPage">
+    <Page.Resources>
+        <conv:ImagePathConverter x:Key="imageConverter"/>
+    </Page.Resources>
+
+    <DockPanel>
+        <StackPanel Margin="2 5" DockPanel.Dock="Top" Orientation="Horizontal">
+            <Label Content="Название:"/>
+            <TextBox Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+            <Label Content="Производитель:"/>
+            <ComboBox Width="200" ItemsSource="{Binding Manufacturers}" DisplayMemberPath="NameManu"   SelectedItem="{Binding SelectedManufacturer}"/>
+            <Label Content="Тип:"/>
+            <ComboBox Width="200" Margin="10 0 0 0" ItemsSource="{Binding ProductTypes}" DisplayMemberPath="TypeName" SelectedItem="{Binding SelectedProductType}"/>
+            <Button Margin="10 0 " Content="Добавить"  Padding="10 0" Command="{Binding AddProductCommand}"/>
+            <Button Margin="10 0 " Content="Изменить"  Padding="10 0" Width="120" IsEnabled="{Binding CanEditProduct}"  Command="{Binding UpdateProductCommand}"/>
+            <Button Margin="10 0 " Content="Удалить"  Padding="10 0" IsEnabled="{Binding CanEditProduct}" Command="{Binding DeleteProductCommand}"/>
+        </StackPanel>
+        <ListView ItemsSource="{Binding Samokats}" SelectedItem="{Binding SelectedProduct}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    <GridView.Columns>
+                        <GridViewColumn Header="Изображение">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding Photo, Converter={StaticResource imageConverter}}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn Header="Цена" DisplayMemberBinding="{Binding Price, StringFormat={}{0:0} рублей}" />
+                        <GridViewColumn Header="Производитель" DisplayMemberBinding="{Binding ManufacturNavigation.NameManu}"/>
+                        <GridViewColumn Header="Тип товара" DisplayMemberBinding="{Binding ProductTypeNavigation.TypeName}"/>
+                        <GridViewColumn Header="Информация">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <Run Text="Максимальная скорость "/>
+                                        <Run Text="{Binding MaxSpeed}"/>
+                                        <Run Text="км/ч"/>
+                                        <LineBreak/>
+                                        <Run Text="Максимальная мощность "/>
+                                        <Run Text="{Binding MaxWatt}"/>
+                                        <Run Text="Ватт"/>
+                                        <LineBreak/>
+                                        <Run Text="Максимальная нагрузка "/>
+                                        <Run Text="{Binding MaxLoad}"/>
+                                        <Run Text="кг"/>
+                                        <LineBreak/>
+                                        <Run Text="до "/>
+                                        <Run Text="{Binding PowerReserve}"/>
+                                        <Run Text="км без подзарядки"/>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </DockPanel>
+</Page>
